@@ -184,6 +184,12 @@ int main() {
    
     
      for (int i = 0; i < n; i++) {
+         //enter what data needs to be put in
+         
+        // int data;
+        // cout << "Enter data for " << validator << ": ";
+        // cin >> data;
+         
         string block = "Block " + to_string(i + 1) + " Data"; // Convert int to string
         blockchain.addBlock(block);
     }
