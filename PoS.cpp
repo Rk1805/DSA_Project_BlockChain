@@ -6,6 +6,7 @@
 #include <algorithm>
 using namespace std;
 
+
 // Block structure
 class Block {
 public:
