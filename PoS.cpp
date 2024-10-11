@@ -181,23 +181,14 @@ int main() {
 
     // Add blocks to the blockchain
     cout << "Adding blocks to the blockchain..." << endl;
-    // blockchain.addBlock("Block 1 Data");
-    // blockchain.addBlock("Block 2 Data");
-    // blockchain.addBlock("Block 3 Data");
+   
     
      for (int i = 0; i < n; i++) {
         string block = "Block " + to_string(i + 1) + " Data"; // Convert int to string
         blockchain.addBlock(block);
     }
 
-    // for (int i = 0; i < n; i++) {
-    //     // Adding validators with their stake amounts
-    // //     string block = "Block" +" " +to_string(i+1)+" "+"Data"; // Convert int to string
-    // //   blockchain.addBlock(block);
-    
-        
-    // }
-
+   
     // Display the blockchain
     blockchain.displayChain();
 
