@@ -163,6 +163,7 @@ public:
 // Main function
 int main() {
     srand(time(nullptr));  // Initialize random seed for validator selection
+    cout << "Enter no. of Users : ";
     int n; cin >> n; // No. of validators to be added 
     
     Blockchain blockchain;
