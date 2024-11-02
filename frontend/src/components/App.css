@@ -1,0 +1,140 @@
+/* General Layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(145deg, #e6f0ff, #f4f9ff);
+  font-family: Arial, sans-serif;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(90deg, #0d6efd, #5a67d8);
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.profile-button {
+  border: none;
+  background-color: transparent;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+.profile-button:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.dropdown {
+  position: absolute;
+  right: 1rem;
+  background-color: white;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin-top: 0.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.logout-button {
+  color: #ff5a5f;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  font-weight: bold;
+  width: 100%;
+}
+.logout-button:hover {
+  background-color: #ffe0e0;
+  cursor: pointer;
+}
+
+.logout-icon {
+  margin-right: 0.5rem;
+}
+
+/* Main Section */
+.main {
+  flex-grow: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  width: 100%;
+  justify-content: left;
+}
+
+/* Card Component */
+.card {
+  background-color: #ffffff;
+  padding: 2rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  width: 300px;
+  height:250px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.card-icon {
+  font-size: 2rem;
+  color: #0d6efd;
+  margin-bottom: 0.8rem;
+}
+
+.card-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333333;
+}
+
+/* Button */
+.btn {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.btn:hover {
+  background-color: #004fcc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Footer */
+.footer {
+  max-width: "100%";
+  width: "100%";
+  background-color: #0d6efd;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}

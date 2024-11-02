@@ -1,0 +1,101 @@
+/* History.css */
+
+.hiscontainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 30px;
+    background: linear-gradient(145deg, #e6f0ff, #f4f9ff);
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+
+.title {
+    font-size: 30px;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.description {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.tableContainer {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    transition: box-shadow 0.2s ease;
+}
+
+.tableContainer:hover {
+    box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    color: #333;
+}
+
+.tableHeader {
+    border-bottom: 2px solid #ddd;
+    padding: 14px;
+    font-weight: 600;
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    color: #ffffff;
+    text-align: left;
+    font-size: 18px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.tableRow {
+    transition: background-color 0.3s ease;
+}
+
+.tableRow:hover {
+    background-color: #f1f5fc;
+}
+
+.tableData {
+    padding: 14px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+}
+
+.positiveAmount {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.negativeAmount {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.backButton {
+    padding: 12px 30px;
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.backButton:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
