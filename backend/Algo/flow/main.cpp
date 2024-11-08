@@ -26,7 +26,7 @@ int main() {
     blockchain.addBlock(newTransactions);
 
     // Print the blockchain
-    for (const auto &block : blockchain.chain) {
+    for (const auto &block : blockchain.getChain()) {
         std::cout << "Previous Block Hash: " << block.previousBlockHash << "\n";
         std::cout << "Merkle Root: " << block.merkleRoot << "\n";
         std::cout << "Block Hash: " << block.calculateBlockHash() << "\n\n";

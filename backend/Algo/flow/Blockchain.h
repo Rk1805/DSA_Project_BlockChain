@@ -2,6 +2,7 @@
 #define BLOCKCHAIN_H
 
 #include "Block.h"
+#include "Transaction.h"
 #include <vector>
 
 class Blockchain {
@@ -19,8 +20,8 @@ public:
         chain.push_back(newBlock);
     }
 
-    const Block& getLastBlock() const {
-        return chain.back();
+    const std::vector<Block>& getChain() const {
+        return chain;
     }
 };
 
