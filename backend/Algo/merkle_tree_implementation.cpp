@@ -1,18 +1,26 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <openssl/sha.h>
+#include <openssl/evp.h>
+#include <iomanip>
+#include <sstream>
 
-// Function to perform SHA256 hashing on a string
+// Function to perform SHA256 hashing on a string using OpenSSL EVP API
 std::string sha256(const std::string& data) {
-    unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, data.c_str(), data.size());
-    SHA256_Final(hash, &sha256);
-    
+    unsigned char hash[EVP_MAX_MD_SIZE];  // EVP_MAX_MD_SIZE is the maximum size for all digests
+    unsigned int hashLength;  // Store the actual length of the hash
+
+    EVP_MD_CTX* context = EVP_MD_CTX_new();  // Create a new digest context
+    if (context == nullptr) return "";  // Error check
+
+    if (EVP_DigestInit_ex(context, EVP_sha256(), nullptr) != 1) return "";  // Initialize digest
+    if (EVP_DigestUpdate(context, data.c_str(), data.size()) != 1) return "";  // Update digest with data
+    if (EVP_DigestFinal_ex(context, hash, &hashLength) != 1) return "";  // Finalize the digest and get length
+
+    EVP_MD_CTX_free(context);  // Clean up the digest context
+
     std::stringstream ss;
-    for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+    for (unsigned int i = 0; i < hashLength; i++) {
         ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
     }
     return ss.str();

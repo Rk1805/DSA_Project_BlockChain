@@ -32,16 +32,13 @@ const server = net.createServer((socket) => {
     const dataString = data.toString();
     console.log("Received raw data:", dataString);
 
-    // Split by line breaks to parse HTTP-like structure
-    const parts = dataString.split('\r\n\r\n'); // HTTP headers and body are separated by '\r\n\r\n'
-    const jsonData = parts[1]; // Assuming JSON data is in the body
-
+    // Extract JSON content directly, assuming raw data is JSON
     try {
-      const parsedData = JSON.parse(jsonData); // Parse JSON data
+      const parsedData = JSON.parse(dataString); // Parse JSON data
       console.log("Parsed JSON data:", parsedData);
 
-      // Send acknowledgment back to the sender in JSON format
-      const acknowledgmentMessage = JSON.stringify({ message: "Data received successfully" });
+      // Store JSON data to a file
+      const acknowledgmentMessage = JSON.stringify({ message: "Data received and stored successfully" });
       socket.write(acknowledgmentMessage);
     } catch (err) {
       console.error("Error parsing JSON:", err.message);

@@ -22,6 +22,10 @@ export default function HomePage() {
     checkToken();
   },[navigate]);
 
+  const Logout =()=> {
+    localStorage.removeItem("id");
+    navigate('/signup');
+  }
   return (
     <div className="container">
       <header className="header">
@@ -35,7 +39,7 @@ export default function HomePage() {
           </button>
           {isProfileOpen && (
             <div className="dropdown">
-              <button className="logout-button" onClick={() => console.log("Logging out...")}>
+              <button className="logout-button" onClick={Logout}>
                 <LogOut size={16} className="logout-icon" />
                 Logout
               </button>
