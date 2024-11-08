@@ -2,16 +2,18 @@
 #define BLOCK_H
 
 #include "MerkleTree.h"
+#include "Transaction.h"  // Include Transaction to make it recognizable
 #include <vector>
+#include <string>
 
 class Block {
 public:
     std::string previousBlockHash;
     std::string merkleRoot;
-    std::vector<std::string> transactions;
+    std::vector<Transaction> transactions;
 
     Block(const std::vector<Transaction> &transactions, const std::string &prevHash)
-        : previousBlockHash(prevHash) {
+        : previousBlockHash(prevHash), transactions(transactions) {
         std::vector<std::string> txHashes;
         for (const auto &tx : transactions) {
             txHashes.push_back(sha256(tx.toString()));
