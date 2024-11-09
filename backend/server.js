@@ -6,7 +6,6 @@ import net from "net";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import historyRoutes from "./routes/historyRoutes.js";
 import balanceRoutes from "./routes/balanceRoutes.js"
-import { recieveTransaction } from "./controllers/transactionController.js";
 
 dotenv.config();
 
@@ -32,18 +31,31 @@ const P2P_PORT = 6001;
 const server = net.createServer((socket) => {
   console.log("New P2P connection established");
 
-  socket.on("data", (data) => {
+  socket.on("data", async (data) => {
     const dataString = data.toString();
     console.log("Received raw data:", dataString);
 
-    // Extract JSON content directly, assuming raw data is JSON
     try {
-      const parsedData = JSON.parse(dataString); // Parse JSON data
+      // Parse JSON data from the TCP connection
+      const parsedData = JSON.parse(dataString);
       console.log("Parsed JSON data:", parsedData);
 
-      // Store JSON data to a file
-      const acknowledgmentMessage = JSON.stringify({ message: "Data received and stored successfully" });
-      socket.write(acknowledgmentMessage);
+      // Send parsed data to the /storeData API endpoint
+      const response = await fetch("http://localhost:5001/recieveTransaction", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: parsedData }),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        console.log("Data sent to API successfully.");
+        socket.write(JSON.stringify({ message: "Data received and stored successfully" }));
+      } else {
+        console.error("Error response from API:", response.statusText);
+        socket.write(JSON.stringify({ error: "Failed to store data in API" }));
+      }
     } catch (err) {
       console.error("Error parsing JSON:", err.message);
       socket.write(JSON.stringify({ error: "Invalid JSON format" }));

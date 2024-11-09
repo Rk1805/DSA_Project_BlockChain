@@ -1,10 +1,14 @@
 #include "Blockchain.h"
 #include "Transaction.h"
 #include <iostream>
+#include<string.h>
 
 int main() {
     Blockchain blockchain;
 
+    float amount;
+    std::string sender;
+    std::string reciever;
     // Sample transactions
     std::vector<Transaction> transactions = {
         Transaction("Alice", "Bob", 10.0),

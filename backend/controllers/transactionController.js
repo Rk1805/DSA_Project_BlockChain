@@ -166,8 +166,35 @@ export const broadcast = async (req, res) => {
 
 export const recieveTransaction = (req, res) => {
   const { data } = req.body;
+  // const cppProcess = spawn("./Algo/wallet/Transaction_main"); // Path to your compiled C++ executable
 
-  res.send("successful");
+  // Send data to the C++ process via stdin
+  // cppProcess.stdin.write(sender + '\n');
+  // cppProcess.stdin.write(to + '\n');
+  // cppProcess.stdin.write(amount + '\n');
+  // cppProcess.stdin.end();
+
+  // // Capture the output from C++ process
+  // let signature = '';
+  // cppProcess.stdout.on('data', (data) => {
+  //     signature += data.toString();
+  // });
+
+  // // Capture any errors from C++ process
+  // cppProcess.stderr.on('data', (data) => {
+  //     console.error(`stderr: ${data}`);
+  // });
+
+  // cppProcess.on('close', (code) => {
+  //     if (code === 0) {
+  //         // Successfully signed the transaction
+  //         res.json({ signature });
+  //     } else {
+  //         // Handle errors
+  //         res.status(500).json({ error: 'Failed to sign transaction' });
+  //     }
+  // });
+  res.send({data : "successful!"});
 };
 
 export const signTransaction = (req, res) => {
