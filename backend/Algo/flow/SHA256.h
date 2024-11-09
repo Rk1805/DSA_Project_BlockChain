@@ -11,7 +11,7 @@ std::string sha256(const std::string &input) {
     std::string result;
     char buf[3];
     for(int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
-        sprintf(buf, "%02x", hash[i]);
+        snprintf(buf, sizeof(buf), "%02x", hash[i]);  // Use snprintf instead of sprintf
         result += buf;
     }
     return result;

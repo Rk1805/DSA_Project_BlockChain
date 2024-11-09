@@ -55,7 +55,8 @@ export const loginUser = async (req, res) => {
     
     if (userData.password === password) {
       // Password is correct, proceed with login
-      return res.status(200).send({ id:userData.id });
+      console.log(userData);
+      return res.status(200).send({ id:userData.username });
     } else {
       // Password is incorrect
       return res.status(401).send({ message: "Incorrect password. Please try again." });

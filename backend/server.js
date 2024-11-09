@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import net from "net";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import historyRoutes from "./routes/historyRoutes.js";
+import balanceRoutes from "./routes/balanceRoutes.js"
 import { recieveTransaction } from "./controllers/transactionController.js";
 
 dotenv.config();
@@ -15,6 +17,8 @@ app.use(cors());
 
 // Initialize routes for HTTP API
 app.use("/", transactionRoutes);
+app.use("/history",historyRoutes);
+app.use("/balance",balanceRoutes);
 
 // HTTP server for the web application
 const WEB_PORT = 5001;

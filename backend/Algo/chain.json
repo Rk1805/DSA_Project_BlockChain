@@ -1,0 +1,45 @@
+{
+    "chain": [
+      {
+        "previousBlockHash": "0",
+        "merkleRoot": "abcd1234",
+        "transactions": [
+          {
+            "sender": "Alice",
+            "receiver": "Bob",
+            "amount": 50.0,
+            "date": "12-07-2024",
+            "signature": "signature1"
+          },
+          {
+            "sender": "Charlie",
+            "receiver": "Dave",
+            "amount": 30.0,
+            "date": "15-07-2024",
+            "signature": "signature2"
+          }
+        ]
+      },
+      {
+        "previousBlockHash": "abcd1234",
+        "merkleRoot": "efgh5678",
+        "transactions": [
+          {
+            "sender": "Eve",
+            "receiver": "Frank",
+            "amount": 20.0,
+            "date": "23-09-2024",
+            "signature": "signature3"
+          },
+          {
+            "sender": "Charlie",
+            "receiver": "Dave",
+            "amount": 30.0,
+            "date": "15-07-2024",
+            "signature": "signature2"
+          }
+        ]
+      }
+    ]
+  }
+  

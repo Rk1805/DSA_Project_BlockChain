@@ -35,7 +35,7 @@ const AuthPage = () => {
       console.log(body);
       if (response.ok) {
         if (isLogin) {
-          localStorage.setItem("id", data.id);
+          localStorage.setItem("id", data.username);
           console.log(data);
           console.log(username);
           console.log(localStorage.getItem("id"));
