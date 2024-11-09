@@ -6,6 +6,7 @@ import {
   loginUser,
   broadcast,
   recieveTransaction,
+  signTransaction,
 } from "../controllers/transactionController.js";
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.post("/signup", signupUser);
 router.post("/login",loginUser);
 router.get("/peers", getAllPeers);
 router.post('/broadcast',broadcast);
-router.post('/broadcastTransaction',recieveTransaction);
+router.post('/recieveTransaction',recieveTransaction);
+router.post('/signtransaction',signTransaction);
 export default router;

@@ -37,6 +37,8 @@ const AuthPage = () => {
         if (isLogin) {
           localStorage.setItem("id", data.id);
           console.log(data);
+          console.log(data.id);
+          console.log(localStorage.getItem("id"));
           toast.success("Logged in successfully!");
           navigate("/");
         } else {

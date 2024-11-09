@@ -20,6 +20,7 @@ std::string getReceiver() const;
 float getAmount() const;
 void setSignature(const std::string& sig);
 bool signTransaction(const std::string& privateKey);
+std::string getSignature() const;
 bool verifySignature(const std::string& publicKey) const;
 };
 

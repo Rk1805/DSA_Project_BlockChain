@@ -1,0 +1,86 @@
+{
+  "chain": [
+    {
+      "previousBlockHash": "0",
+      "merkleRoot": "abcd1234",
+      "hash": "0",
+      "nonce": "0",
+      "transactions": [
+        {
+          "sender": "Alice",
+          "receiver": "Bob",
+          "amount": "50",
+          "date": "12-07-2024",
+          "signature": "signature1"
+        },
+        {
+          "sender": "Charlie",
+          "receiver": "Dave",
+          "amount": "30",
+          "date": "15-07-2024",
+          "signature": "signature2"
+        }
+      ]
+    },
+    {
+      "previousBlockHash": "f1534392279bddbf9d43dde8701cb5be14b82f76ec6607bf8d6ad557f60f304e",
+      "merkleRoot": "16f686b2796efbc7376dbe00531db9ac14c2ce8427185d6e1d7d02984de41103",
+      "hash": "0000ecc9f7834e923054cbfb0dab043e71695358b92fc2124cc15e2830c58612",
+      "nonce": "75700",
+      "transactions": [
+        {
+          "sender": "xyz",
+          "receiver": "rk",
+          "amount": "123",
+          "date": "11/9/2024",
+          "signature": "signature-placeholder"
+        }
+      ]
+    },
+    {
+      "previousBlockHash": "f1534392279bddbf9d43dde8701cb5be14b82f76ec6607bf8d6ad557f60f304e",
+      "merkleRoot": "16f686b2796efbc7376dbe00531db9ac14c2ce8427185d6e1d7d02984de41103",
+      "hash": "0000ecc9f7834e923054cbfb0dab043e71695358b92fc2124cc15e2830c58612",
+      "nonce": "75700",
+      "transactions": [
+        {
+          "sender": "xyz",
+          "receiver": "rk",
+          "amount": "123",
+          "date": "11/9/2024",
+          "signature": "signature-placeholder"
+        }
+      ]
+    },
+    {
+      "previousBlockHash": "f1534392279bddbf9d43dde8701cb5be14b82f76ec6607bf8d6ad557f60f304e",
+      "merkleRoot": "ef4f5e029e72ba878ab72195bf805090ddbbb0c9de37dfeffcae7d0be2aa2669",
+      "hash": "0000de48cf247c9541f5dbd7f0f2c0abf661adf08dcea5de7964a8f1b39120ee",
+      "nonce": "26902",
+      "transactions": [
+        {
+          "sender": "xyz",
+          "receiver": "rishi",
+          "amount": "23",
+          "date": "11/9/2024",
+          "signature": "signature-placeholder"
+        }
+      ]
+    },
+    {
+      "previousBlockHash": "f1534392279bddbf9d43dde8701cb5be14b82f76ec6607bf8d6ad557f60f304e",
+      "merkleRoot": "4d1e6f573402e1dbd7f270e758ce2b3b76bf406e90fa2fca7c8c99ba4887e124",
+      "hash": "0000d56041af134a189f6b32ba9e77e3ab231d33b94b8a8e83d53b7946b11f35",
+      "nonce": "50987",
+      "transactions": [
+        {
+          "sender": "xyz",
+          "receiver": "rishi",
+          "amount": "378",
+          "date": "11/9/2024",
+          "signature": "signature-placeholder"
+        }
+      ]
+    }
+  ]
+}

@@ -23,9 +23,47 @@ export default function Transaction() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Transaction Submitted:", transaction);
+        console.log("Transaction Submitted:");
+        const transaction_data={
+            sender: "xyz",
+            amount: transaction.amount,
+            to:transaction.to,
+        }
+        const res = await fetch("http://localhost:5001/signtransaction",{
+            method:"POST",
+            headers : { "Content-Type": "application/json" },
+            body: JSON.stringify(transaction_data),
+        });
+        const data1=await res.json();
+        if(res.ok) {
+            console.log("signed!");
+        }
+        else {
+            toast.error(data1.error);
+        }
+
+        const broadcast_data={
+            sender: "xyz",
+            amount: transaction.amount,
+            to:transaction.to,
+            signature: data1.signature, 
+        }
+        console.log(broadcast_data);
+        const response = await fetch("http://localhost:5001/broadcast",{
+            method:"POST",
+            headers : { "Content-Type": "application/json" },
+            body: JSON.stringify(broadcast_data),
+        })
+        const data2=await response.json();
+        if(response.ok) {
+            console.log(data2);
+            
+        }
+        else {
+            toast.error(data2.error);
+        }
         setTransaction({ to: "", amount: "", message: "" });
     };
 
@@ -70,7 +108,7 @@ export default function Transaction() {
                         className="input"
                     />
                 </label>
-                <button type="submit" className="submitButton">
+                <button type="submit" className="submitButton" onClick={handleSubmit}>
                     Submit Transaction
                 </button>
             </form>
