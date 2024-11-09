@@ -4,7 +4,8 @@
 #include<string.h>
 
 int main() {
-    Blockchain blockchain;
+    int difficulty = 4; // Set the difficulty level
+    Blockchain blockchain(difficulty);
 
     float amount;
     std::string sender;
@@ -30,10 +31,11 @@ int main() {
     blockchain.addBlock(newTransactions);
 
     // Print the blockchain
-    for (const auto &block : blockchain.getChain()) {
+    for (const auto& block : blockchain.getChain()) {
         std::cout << "Previous Block Hash: " << block.previousBlockHash << "\n";
         std::cout << "Merkle Root: " << block.merkleRoot << "\n";
-        std::cout << "Block Hash: " << block.calculateBlockHash() << "\n\n";
+        std::cout << "Block Hash: " << block.hash << "\n";
+        std::cout << "Nonce: " << block.nonce << "\n\n";
     }
 
     return 0;
