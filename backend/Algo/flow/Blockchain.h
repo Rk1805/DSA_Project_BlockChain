@@ -15,8 +15,7 @@ public:
         chain.emplace_back(std::vector<Transaction>(), "0"); // Genesis block
     }
 
-    void addBlock(const std::vector<Transaction>& transactions) {
-        std::string prevBlockHash = chain.back().calculateBlockHash();
+    void addBlock(const std::vector<Transaction>& transactions,std::string prevBlockHash) {
         Block newBlock(transactions, prevBlockHash);
 
         // Proof of Work

@@ -52,8 +52,8 @@ export default function History() {
                             <tr key={index} className="tableRow">
                                 <td className="tableData">{transaction.date || "N/A"}</td>
                                 <td className="tableData">
-                                    <span className={transaction.amount < 0 ? "negativeAmount" : "positiveAmount"}>
-                                        ${transaction.amount.toFixed(2)}
+                                    <span className={parseFloat(transaction.amount) < 0 ? "negativeAmount" : "positiveAmount"}>
+                                        ${transaction.amount}
                                     </span>
                                 </td>
                                 <td className="tableData">{transaction.sender}</td>
