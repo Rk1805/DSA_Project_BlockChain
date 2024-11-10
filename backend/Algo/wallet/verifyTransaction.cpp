@@ -3,7 +3,7 @@
 //sudo apt install libcurl4-openssl-dev
 //sudo apt update
 //sudo apt install libjsoncpp-dev
-
+//these are for linux use other commands for ios
 //
 #include <iostream>
 #include <string>
