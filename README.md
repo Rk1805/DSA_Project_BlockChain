@@ -24,3 +24,10 @@ Proof of Stake (PoS): Implements validator selection based on coin holdings to c
 ### 5. Transaction and Block Propagation
 Simulates a basic peer-to-peer (P2P) network for transaction and block propagation between nodes.
 Integrates Bloom filters to improve network efficiency.
+
+Contributors:-
+1.) Rishi Kaneria
+2.) Sahilpreet Singh
+3.) Saher Dev
+4.) Sahil Narkhede 
+5.) Akshay
