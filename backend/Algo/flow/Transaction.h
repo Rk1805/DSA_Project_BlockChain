@@ -2,18 +2,20 @@
 #define TRANSACTION_H
 
 #include <string>
+using namespace std;
 
 class Transaction {
 public:
-    std::string sender;
-    std::string receiver;
+    string sender;
+    string receiver;
     double amount;
 
-    Transaction(std::string sender, std::string receiver, double amount)
+    //constructor
+    Transaction(string sender, string receiver, double amount)
         : sender(sender), receiver(receiver), amount(amount) {}
 
-    std::string toString() const {
-        return sender + "->" + receiver + ": " + std::to_string(amount);
+    string toString() const {
+        return sender + "->" + receiver + ": " + to_string(amount);
     }
 };
 
