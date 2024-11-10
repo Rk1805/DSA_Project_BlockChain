@@ -11,16 +11,16 @@ using namespace std;
 
 class Block {
 public:
-    string previousBlockHash; //Stores the hash of the previous block, linking this block to the previous one.
-    string merkleRoot;//Holds the Merkle root hash of all transactions in this blo
-    int nonce;//Used in proof-of-work to create a valid block hash.
-    string hash//;Stores the hash of this block.
-    vector<Transaction> transactions;//A vector containing the transactions for this block.
+    string previousBlockHash;         //Stores the hash of the previous block, linking this block to the previous one.
+    string merkleRoot;                //Holds the Merkle root hash of all transactions in this blo
+    int nonce;                        //Used in proof-of-work to create a valid block hash.
+    string hash;                      //Stores the hash of this block.
+    vector<Transaction> transactions; //A vector containing the transactions for this block.
 
     /* CONTSTRUCTOR*/
     Block(const vector<Transaction>& transactions, const string& prevHash)
         : previousBlockHash(prevHash), transactions(transactions), nonce(0), hash("") {
-        MerkleTree merkleTree;//creates a Merkle tree object.
+        MerkleTree merkleTree;    //creates a Merkle tree object.
         merkleRoot = merkleTree.calculateMerkleRoot(getTransactionHashes());
         // is set by calculating the Merkle root hash from all transaction hashes using calculateMerkleRoot.
     }
