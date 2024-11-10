@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Transaction.css";
 import {toast,ToastContainer} from "react-toastify";
+import fs from "fs";
 
 export default function Transaction() {
     const navigate = useNavigate();
@@ -9,7 +10,6 @@ export default function Transaction() {
     const handleBack = () => {
         navigate('/');
     };
-
     const [transaction, setTransaction] = useState({
         to: "",
         amount: "",
@@ -26,9 +26,11 @@ export default function Transaction() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const user=localStorage.getItem('id');
+        console.log(user);
         console.log("Transaction Submitted:");
         const transaction_data={
-            sender: "xyz",
+            sender: user,
             amount: transaction.amount,
             to:transaction.to,
         }
@@ -38,24 +40,17 @@ export default function Transaction() {
             body: JSON.stringify(transaction_data),
         });
         const data1=await res.json();
+        console.log("data recieved transc:",data1)
         if(res.ok) {
             console.log("signed!");
         }
         else {
             toast.error(data1.error);
         }
-
-        const broadcast_data={
-            sender: "xyz",
-            amount: transaction.amount,
-            to:transaction.to,
-            signature: data1.signature, 
-        }
-        console.log(broadcast_data);
         const response = await fetch("http://localhost:5001/singlebroadcast",{
             method:"POST",
             headers : { "Content-Type": "application/json" },
-            body: JSON.stringify({data:broadcast_data,message:"transaction"}),
+            body: JSON.stringify({data:data1,message:"transaction"}),
         })
         const data2=await response.json();
         if(response.ok) {

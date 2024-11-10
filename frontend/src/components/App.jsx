@@ -26,6 +26,16 @@ export default function HomePage() {
     localStorage.removeItem("id");
     navigate('/signup');
   }
+  const UpdateChain=async(e) => {
+    const res = await fetch("http://localhost:5001/broadcast",{
+            method:"POST",
+            headers : { "Content-Type": "application/json" },
+            body: JSON.stringify({message:"update"}),
+        });
+        const data1=await res.json();
+        console.log(data1);
+  }
+  UpdateChain();
   return (
     <div className="container">
       <header className="header">

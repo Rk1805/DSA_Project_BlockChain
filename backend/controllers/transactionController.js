@@ -168,7 +168,7 @@ export const singlebroadcast = async (req, res) => {
   const to=data.to
   const amount=data.amount
   const signature=data.signature
-   
+  const publicKey=data.publicKey
 
   // Fetch all peer IPs from Firestore
   const peersSnapshot = await getDocs(collection(db, "users"));
@@ -179,12 +179,12 @@ export const singlebroadcast = async (req, res) => {
 
   let peerIPs = peersSnapshot.docs.map((doc) => doc.data().ip);
   console.log("Initial peer IPs:", peerIPs);
-
   const jsonData = {
     sender,
     to,
     amount,
     signature,
+    publicKey
   };
 
   const broadcastToPeer = (ip) => {
@@ -341,7 +341,6 @@ export const recieveTransaction = (req, res) => {
                     receiver: data.to,
                     amount: amt,
                     date: new Date().toLocaleDateString(),
-                    signature: "signature-placeholder"
                   }
                 ]
               };
@@ -363,6 +362,23 @@ export const recieveTransaction = (req, res) => {
       }
     });
   }
+  else if(message=="update") {
+    fs.readFile(filePath, "utf8", (err, fileData) => {
+      if (err) {
+        console.error("Error reading chain.json:", err);
+        return res.status(500).json({ error: "Error reading chain file" });
+      }
+  
+      let blockchain;
+      try {
+        blockchain = JSON.parse(fileData);
+        res.json(blockchain.chain);
+      } catch (parseErr) {
+        console.error("Error parsing chain.json:", parseErr);
+        return res.status(500).json({ error: "Error parsing chain file for update" });
+      }
+    });
+  }
 };
 
 
@@ -370,6 +386,17 @@ export const signTransaction = (req, res) => {
 
   const { sender, to, amount } = req.body;
 
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const filePath = path.join(__dirname, "../publicKey.pem");
+  let publicKey='';
+  fs.readFile(filePath, "utf8", (err, fileData) => {
+    if (err) {
+      console.error("Error reading chain.json:", err);
+      return res.status(500).json({ error: "Error reading chain file" });
+    }
+    publicKey=fileData
+  })
   // Spawn a child process to run the compiled C++ executable
   const cppProcess = spawn("./Algo/wallet/Transaction_main"); // Path to your compiled C++ executable
 
@@ -385,6 +412,8 @@ export const signTransaction = (req, res) => {
       signature += data.toString();
   });
 
+  
+
   // Capture any errors from C++ process
   cppProcess.stderr.on('data', (data) => {
       console.error(`stderr: ${data}`);
@@ -392,8 +421,15 @@ export const signTransaction = (req, res) => {
 
   cppProcess.on('close', (code) => {
       if (code === 0) {
+        const data ={
+          sender:sender,
+          to:to,
+          amount:amount,
+          signature: signature,
+          publicKey: publicKey
+        }
           // Successfully signed the transaction
-          res.json({ signature });
+          res.json(data);
       } else {
           // Handle errors
           res.status(500).json({ error: 'Failed to sign transaction' });

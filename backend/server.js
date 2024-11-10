@@ -70,7 +70,7 @@ const server = net.createServer((socket) => {
               socket.write(JSON.stringify({ error: "Failed to store data in API" }));
             }
           }
-          else{
+          else {
               console.log("block stored to API successfully.");
               socket.write(JSON.stringify({ message: "Data received and stored successfully" }));
           }
