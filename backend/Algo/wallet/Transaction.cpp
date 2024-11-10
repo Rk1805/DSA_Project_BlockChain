@@ -3,7 +3,7 @@
 #include <openssl/pem.h>
 #include <openssl/err.h>
 #include <stdexcept>
-
+using namespace std;
 // Constructor
 Transaction::Transaction(const std::string& sender, const std::string& receiver, float amount)
 : sender(sender), receiver(receiver), amount(amount) {}
