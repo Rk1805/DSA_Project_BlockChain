@@ -3,7 +3,7 @@
 #include <string>
 #include<fstream>
 #include<sstream>
-
+using namespace std;
 std::string readPrivateKeyFromFile(const std::string& privateKeyFile) {
     // Expanding '~' to home directory manually
     const char* homeDir = std::getenv("HOME");  // Get home directory
