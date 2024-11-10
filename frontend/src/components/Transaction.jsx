@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Transaction.css";
+import {toast,ToastContainer} from "react-toastify";
 
 export default function Transaction() {
     const navigate = useNavigate();
@@ -51,10 +52,10 @@ export default function Transaction() {
             signature: data1.signature, 
         }
         console.log(broadcast_data);
-        const response = await fetch("http://localhost:5001/broadcast",{
+        const response = await fetch("http://localhost:5001/singlebroadcast",{
             method:"POST",
             headers : { "Content-Type": "application/json" },
-            body: JSON.stringify(broadcast_data),
+            body: JSON.stringify({data:broadcast_data,message:"transaction"}),
         })
         const data2=await response.json();
         if(response.ok) {
@@ -115,6 +116,7 @@ export default function Transaction() {
             <button className="backButton" onClick={handleBack}>
                 Back
             </button>
+            <ToastContainer/>
         </div>
     );
 }

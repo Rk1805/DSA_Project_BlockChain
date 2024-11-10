@@ -5,6 +5,7 @@ import {
   getAllPeers,
   loginUser,
   broadcast,
+  singlebroadcast,
   recieveTransaction,
   signTransaction,
 } from "../controllers/transactionController.js";
@@ -16,6 +17,7 @@ router.post("/signup", signupUser);
 router.post("/login",loginUser);
 router.get("/peers", getAllPeers);
 router.post('/broadcast',broadcast);
+router.post('/singlebroadcast',singlebroadcast);
 router.post('/recieveTransaction',recieveTransaction);
 router.post('/signtransaction',signTransaction);
 export default router;

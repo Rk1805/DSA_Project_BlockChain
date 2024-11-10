@@ -95,8 +95,8 @@ export const getAllPeers = async (req, res) => {
 
 export const broadcast = async (req, res) => {
   console.log("Full request body:", req.body);
-  const { sender,amount,to,signature } = req.body;
-  console.log("Received broadcast_data:", sender);
+  const {data, message}=req.body
+  console.log("Received broadcast_data:" );
   const peersSnapshot = await getDocs(collection(db, "users"));
     if (peersSnapshot.empty) {
         console.log("No peers found in database.");
@@ -110,12 +110,7 @@ export const broadcast = async (req, res) => {
     });
     console.log(peerIPs);
   const onlinePeers = [];
-  const jsonData = {
-    sender:sender,
-    to:to,
-    amount:amount,
-    signature:signature,
-  }; 
+  const jsonData = {message:message,data:data}; 
 
   await Promise.all(
     peerIPs.map((ip) => {
@@ -126,7 +121,7 @@ export const broadcast = async (req, res) => {
           console.error(`Timeout on peer ${ip}`);
           client.destroy(); // Close client if timeout occurs
           resolve();
-        }, 2000); // 5-second timeout
+        }, 200); // 0.2-second timeout
   
         client.connect(targetPort, ip, () => {
           console.log(`Connected to peer at ${ip}:${targetPort}`);
@@ -165,105 +160,211 @@ export const broadcast = async (req, res) => {
   });
 };
 
+export const singlebroadcast = async (req, res) => {
+  console.log("Full single request body:", req.body);
+  const {data,message} = req.body;
+  console.log("Received single broadcast_data:", data);
+  const sender=data.sender
+  const to=data.to
+  const amount=data.amount
+  const signature=data.signature
+   
+
+  // Fetch all peer IPs from Firestore
+  const peersSnapshot = await getDocs(collection(db, "users"));
+  if (peersSnapshot.empty) {
+    console.log("No peers found in database.");
+    return res.status(404).send("No peers found.");
+  }
+
+  let peerIPs = peersSnapshot.docs.map((doc) => doc.data().ip);
+  console.log("Initial peer IPs:", peerIPs);
+
+  const jsonData = {
+    sender,
+    to,
+    amount,
+    signature,
+  };
+
+  const broadcastToPeer = (ip) => {
+    return new Promise((resolve) => {
+      const targetPort = 6001;
+      const client = new net.Socket();
+      const timeout = setTimeout(() => {
+        console.error(`Timeout on peer ${ip}`);
+        client.destroy();
+        resolve(false); // Indicate that this peer was not online
+      }, 1000); // 0.2-second timeout
+
+      client.connect(targetPort, ip, () => {
+        console.log(`Connected to peer at ${ip}:${targetPort}`);
+        client.write(JSON.stringify({data:jsonData,message:"transaction"}));
+      });
+
+      client.on("data", (response) => {
+        clearTimeout(timeout);
+        console.log(`Received response from peer ${ip}:`, response.toString());
+        client.destroy();
+        resolve(true); // Successful broadcast
+      });
+
+      client.on("error", (err) => {
+        clearTimeout(timeout);
+        console.error(`Connection error with peer ${ip}:`, err.message);
+        client.destroy();
+        resolve(false); // This peer is offline
+      });
+
+      client.on("close", () => {
+        console.log(`Connection closed with peer ${ip}`);
+      });
+    });
+  };
+
+  // Try broadcasting to random peers until one is online
+  while (peerIPs.length > 0) {
+    const randomIndex = Math.floor(Math.random() * peerIPs.length);
+    const ip = peerIPs.splice(randomIndex, 1)[0]; // Remove the chosen IP from the list
+
+    const success = await broadcastToPeer(ip);
+    if (success) {
+      return res.status(200).send({ message: `Broadcast successful to peer ${ip}` });
+    }
+  }
+
+  // If no peers are online
+  res.status(500).send({ message: "No peers were online to receive the broadcast." });
+};
+
 
 export const recieveTransaction = (req, res) => {
-  const { data } = req.body;
-  const cppProcess = spawn("./Algo/flow/main"); // Path to your compiled C++ executable
+  console.log("req body",req.body);
+  const { data,message } = req.body;
+  console.log(data,message)
 
-  // Send data to the C++ process via stdin
-  cppProcess.stdin.write(data.sender + '\n');
-  cppProcess.stdin.write(data.to + '\n');
-  cppProcess.stdin.write(data.amount + '\n');
-  cppProcess.stdin.write("f1534392279bddbf9d43dde8701cb5be14b82f76ec6607bf8d6ad557f60f304e" + '\n');
-  cppProcess.stdin.end();
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const filePath = path.join(__dirname, "../Algo/chain.json");
 
-  let output = ''; // Accumulate all output here
-
-  // Capture all output data from the C++ process
-  cppProcess.stdout.on('data', (data) => {
-    output += data.toString(); // Append data to the output string
-  });
-
-  // Capture any errors from the C++ process
-  cppProcess.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  cppProcess.on('close', (code) => {
-    if (code === 0) {
-      // Split the accumulated output by lines
-      const outputLines = output.trim().split('\n');
-
-      // Ensure that we have at least four lines of output
-      if (outputLines.length >= 4) {
-        const previousBlockHash = outputLines[0];
-        const merkleRoot = outputLines[1];
-        const hash = outputLines[2];
-        const nonce = outputLines[3];
-
-        let amt= parseFloat(data.amount);
-        // Create a block object in the required format
-        const newBlock = {
-          previousBlockHash,
-          merkleRoot,
-          hash,
-          nonce,
-          transactions: [
-            {
-              sender: data.sender,
-              receiver: data.to,
-              amount: amt,
-              date: new Date().toLocaleDateString(), // Set current date
-              signature: "signature-placeholder" // Replace this with actual signature if available
-            }
-          ]
-        };
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
-        // Load existing chain from chain.json
-        const filePath = path.join(__dirname, "../Algo/chain.json");
-        fs.readFile(filePath, "utf8", (err, fileData) => {
-          if (err) {
-            console.error("Error reading chain.json:", err);
-            return res.status(500).json({ error: "Error reading chain file" });
+  if(message=="block"){
+    fs.readFile(filePath, "utf8", (err, fileData) => {
+      if (err) {
+        console.error("Error reading chain.json:", err);
+        return res.status(500).json({ error: "Error reading chain file" });
+      }
+  
+      let blockchain;
+      try {
+        blockchain = JSON.parse(fileData);
+  
+        // Add the new block to the blockchain
+        blockchain.chain.push(data);
+  
+        // Write the updated blockchain back to chain.json
+        fs.writeFile(filePath, JSON.stringify(blockchain, null, 2), "utf8", (writeErr) => {
+          if (writeErr) {
+            console.error("Error writing to chain.json:", writeErr);
+            return res.status(500).json({ error: "Error updating chain file" });
           }
-
-          let blockchain;
-          try {
-            // Parse the existing chain data
-            blockchain = JSON.parse(fileData);
-          } catch (parseErr) {
-            console.error("Error parsing chain.json:", parseErr);
-            return res.status(500).json({ error: "Error parsing chain file" });
-          }
-
-          // Append new block to the chain
-          blockchain.chain.push(newBlock);
-
-          // Write updated chain back to chain.json
-          fs.writeFile(filePath, JSON.stringify(blockchain, null, 2), "utf8", (writeErr) => {
-            if (writeErr) {
-              console.error("Error writing to chain.json:", writeErr);
-              return res.status(500).json({ error: "Error updating chain file" });
-            }
-
-            // Send a response back to the client with the new block
-            res.json({
-              message: "Block added successfully!",
-              block: newBlock
-            });
+  
+          res.json({
+            message: "Block added successfully!",
+            block: data
           });
         });
-      } else {
-        // Handle case where there are not enough lines of output
-        res.status(500).json({ error: 'Insufficient output from C++ process' });
+      } catch (parseErr) {
+        console.error("Error parsing chain.json:", parseErr);
+        return res.status(500).json({ error: "Error parsing chain file" });
       }
-    } else {
-      // Handle errors
-      res.status(500).json({ error: 'Failed to sign transaction' });
-    }
-  });
+    });
+  }
+  else if(message=="transaction"){
+    console.log("transaction", data);
+    // Read the blockchain to get the last block's hash
+    fs.readFile(filePath, "utf8", (err, fileData) => {
+      if (err) {
+        console.error("Error reading chain.json:", err);
+        return res.status(500).json({ error: "Error reading chain file" });
+      }
+
+      let blockchain;
+      try {
+        blockchain = JSON.parse(fileData);
+
+        // Check if the chain has blocks
+        if (blockchain.chain.length === 0) {
+          return res.status(500).json({ error: "Blockchain is empty" });
+        }
+
+        // Get the last block's hash
+        const lastBlock = blockchain.chain[blockchain.chain.length - 1];
+        console.log(lastBlock)
+        const previousBlockHash = lastBlock.hash;
+        console.log(previousBlockHash);
+
+        // Continue with transaction processing using previousBlockHash
+        const cppProcess = spawn("./Algo/flow/main"); // Path to your compiled C++ executable
+
+        cppProcess.stdin.write(data.sender + '\n');
+        cppProcess.stdin.write(data.to + '\n');
+        cppProcess.stdin.write(data.amount + '\n');
+        cppProcess.stdin.write(previousBlockHash + '\n');
+        cppProcess.stdin.end();
+
+        let output = ''; // Accumulate all output here
+
+        cppProcess.stdout.on('data', (data) => {
+          output += data.toString();
+        });
+
+        cppProcess.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
+        });
+
+        cppProcess.on('close', (code) => {
+          if (code === 0) {
+            const outputLines = output.trim().split('\n');
+            console.log(outputLines);
+            if (outputLines.length >= 3) {
+              const [newpreviousBlockHash,merkleRoot, hash, nonce] = outputLines;
+
+              let amt = parseFloat(data.amount);
+              const newBlock = {
+                previousBlockHash,
+                merkleRoot,
+                hash,
+                nonce,
+                transactions: [
+                  {
+                    sender: data.sender,
+                    receiver: data.to,
+                    amount: amt,
+                    date: new Date().toLocaleDateString(),
+                    signature: "signature-placeholder"
+                  }
+                ]
+              };
+
+                res.json({
+                  message: "block",
+                  block: newBlock
+                });
+            } else {
+              res.status(500).json({ error: 'Insufficient output from C++ process' });
+            }
+          } else {
+            res.status(500).json({ error: 'Failed to sign transaction' });
+          }
+        });
+      } catch (parseErr) {
+        console.error("Error parsing chain.json:", parseErr);
+        return res.status(500).json({ error: "Error parsing chain file" });
+      }
+    });
+  }
 };
+
 
 export const signTransaction = (req, res) => {
 

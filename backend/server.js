@@ -32,6 +32,7 @@ const server = net.createServer((socket) => {
   console.log("New P2P connection established");
 
   socket.on("data", async (data) => {
+    console.log(data);
     const dataString = data.toString();
     console.log("Received raw data:", dataString);
 
@@ -44,14 +45,36 @@ const server = net.createServer((socket) => {
       const response = await fetch("http://localhost:5001/recieveTransaction", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ data: parsedData }),
+        body: JSON.stringify({data:parsedData.data,message:parsedData.message}),
       });
 
       const data = await response.json();
-      console.log(data);
+      console.log("to be boradcasted data:",data);
+      
       if (response.ok) {
-        console.log("Data sent to API successfully.");
-        socket.write(JSON.stringify({ message: "Data received and stored successfully" }));
+          if(data.message=="block") {
+              console.log("inside block")
+              const resp = await fetch("http://localhost:5001/broadcast", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({message:data.message, data:data.block}),
+            });
+
+            const dat = await resp.json();
+            if(resp.ok) {
+              console.log("block sent to API successfully.");
+              socket.write(JSON.stringify({ message: "Data received and stored successfully" }));
+            }
+            else {
+              console.error("Error response from API:", resp.statusText);
+              socket.write(JSON.stringify({ error: "Failed to store data in API" }));
+            }
+          }
+          else{
+              console.log("block stored to API successfully.");
+              socket.write(JSON.stringify({ message: "Data received and stored successfully" }));
+          }
+        
       } else {
         console.error("Error response from API:", response.statusText);
         socket.write(JSON.stringify({ error: "Failed to store data in API" }));
