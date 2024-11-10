@@ -45,8 +45,7 @@ Cryptonix is a simple blockchain-based web application developed using C++, Java
 
 1. **Clone the Repository:**
    ```bash
-   git clone <repository-url>
-   cd project-root
+   git clone <https://github.com/Rk1805/DSA_Project_BlockChain.git>
    ```
 
 2. **Install Backend Dependencies:**
