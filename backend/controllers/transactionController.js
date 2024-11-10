@@ -8,6 +8,7 @@ import fs from "fs";
 import path from "path";
 import express from "express";
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 
 const app = express();
 app.use(express.json());
@@ -281,6 +282,11 @@ export const recieveTransaction = (req, res) => {
   }
   else if(message=="transaction"){
     console.log("transaction", data);
+    const transactionData = data.sender + data.to + data.amount;
+    if (!verifySignature(data.publicKey, data.signature, transactionData)) {
+      console.log("Invalid signature");
+      return res.status(400).json({ error: "Invalid signature" });
+    }
     // Read the blockchain to get the last block's hash
     fs.readFile(filePath, "utf8", (err, fileData) => {
       if (err) {
@@ -436,3 +442,10 @@ export const signTransaction = (req, res) => {
       }
   });
 };
+
+function verifySignature(publicKey, signature, data) {
+  const verify = crypto.createVerify('sha256');
+  verify.update(data);
+  verify.end();
+  return verify.verify(publicKey, signature, 'hex');
+}
