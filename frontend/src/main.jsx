@@ -8,10 +8,12 @@ import Balance from '../src/components/Balance'
 import Transaction from '../src/components/Transaction'
 import Signup from './components/Signup'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
     <Routes>
+      
     <Route path="/" element={<App/>} />
     <Route path="/history" element={<History/>} />
     <Route path="/Balance" element={<Balance/>} />
