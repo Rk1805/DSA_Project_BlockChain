@@ -8,6 +8,7 @@ import Balance from '../src/components/Balance'
 import Transaction from '../src/components/Transaction'
 import Signup from './components/Signup'
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Router>
