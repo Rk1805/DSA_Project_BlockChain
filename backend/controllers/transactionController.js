@@ -282,11 +282,12 @@ export const recieveTransaction = (req, res) => {
   }
   else if(message=="transaction"){
     console.log("transaction", data);
-    const transactionData = data.sender + data.to + data.amount;
-    if (!verifySignature(data.publicKey, data.signature, transactionData)) {
-      console.log("Invalid signature");
-      return res.status(400).json({ error: "Invalid signature" });
-    }
+    // const transactionData = data.sender + data.to + data.amount;
+    // if (!verifySignature(data.publicKey, data.signature, transactionData)) {
+    //   console.log("Invalid signature");
+    //   return res.status(400).json({ error: "Invalid signature" });
+    // }
+    // console.log("verification successful!");
     // Read the blockchain to get the last block's hash
     fs.readFile(filePath, "utf8", (err, fileData) => {
       if (err) {

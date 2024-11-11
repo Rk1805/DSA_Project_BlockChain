@@ -1,20 +1,21 @@
 // firebase.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import dotenv  from "dotenv";
+dotenv.config()
+
 
 // Your Firebase config object
-const firebaseConfig = {
-  apiKey: "AIzaxSyC6IIKQu5m4SAPA5Dntr2o2yv5amwmkRy8",
-  authDomain: "dsa-project-c5b6f.firebaseapp.com",
-  projectId: "dsa-project-c5b6f",
-  storageBucket: "dsa-project-c5b6f.appspot.com",
-  messagingSenderId: "912603969519",
-  appId: "1:912603969519:web:d3f107346484f81485e81a",
-  measurementId: "G-JSSRWYMP4S"
-};
+const app = initializeApp({
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+});
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
 // Get Firestore instance
 const db = getFirestore(app);
 
