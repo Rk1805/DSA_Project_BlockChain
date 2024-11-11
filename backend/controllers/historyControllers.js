@@ -20,7 +20,7 @@ export const getHistory = async (req, res) => {
           amount: tx.amount,
           sender: tx.sender,
           receiver: tx.receiver,
-          date: block.date // Assuming each block has a timestamp field
+          date: tx.date // Assuming each block has a timestamp field
         }))
       );
 
